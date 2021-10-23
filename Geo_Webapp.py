@@ -35,9 +35,16 @@ for lt, ln, el, name in zip(lat, lon, elev, name):
     iframe = folium.IFrame(html=html % (name, name, el), width=200, height=100)
     fg_volcano.add_child(folium.Marker(location=[lt, ln], popup=folium.Popup(iframe), icon = folium.Icon(color=color_producer(el))))
 
+'''
+COde for Circle Marker's
+for lt, ln, el, name in zip(lat, lon, elev, name):
+    fg_volcano.add_child(folium.CircleMarker(location = [lt,ln], radius=6, popup=str(l)+ " m".
+    fill_color = color_producer(el), color='grey', fill_opacity=0.5))
+'''
+
+
 # crating next layer of population
 fg_population = folium.FeatureGroup(name="Population")
-
 fg_population.add_child(folium.GeoJson(data= open('world.json', 'r', encoding='utf-8-sig').read(), 
 style_function= lambda x: {'fillColor': 'green' if x['properties']['POP2005'] < 3500000 
 else 'orange' if 3500000 <= x['properties']['POP2005'] <= 10000000  else 'red'}))
