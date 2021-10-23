@@ -29,14 +29,26 @@ map = folium.Map(location= [38.50, -99.09], zoom_start= 5, tiles="Stamen Terrain
 
 # Creating layer 1
 # fg = feature group
-fg = folium.FeatureGroup(name="My Map")
+fg_volcano = folium.FeatureGroup(name="Volcanoes")
 
 for lt, ln, el, name in zip(lat, lon, elev, name):
     iframe = folium.IFrame(html=html % (name, name, el), width=200, height=100)
-    fg.add_child(folium.Marker(location=[lt, ln], popup=folium.Popup(iframe), icon = folium.Icon(color=color_producer(el))))
+    fg_volcano.add_child(folium.Marker(location=[lt, ln], popup=folium.Popup(iframe), icon = folium.Icon(color=color_producer(el))))
+
+# crating next layer of population
+fg_population = folium.FeatureGroup(name="Population")
+
+fg_population.add_child(folium.GeoJson(data= open('world.json', 'r', encoding='utf-8-sig').read(), 
+style_function= lambda x: {'fillColor': 'green' if x['properties']['POP2005'] < 3500000 
+else 'orange' if 3500000 <= x['properties']['POP2005'] <= 10000000  else 'red'}))
 
 # Add layer to map
-map.add_child(fg)
+map.add_child(fg_volcano)
+map.add_child(fg_population)
+
+# Add Layer Controler
+# keep in mind to add it after adding layers else it wont work
+map.add_child(folium.LayerControl())
 
 # save map
 map.save("Map.html")
